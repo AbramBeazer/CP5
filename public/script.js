@@ -4,6 +4,7 @@ var app = new Vue({
     books: [],
     movies: [],
     games: [],
+    username: "",
     token: "",
     drag: {},
     bookText: "",
@@ -25,7 +26,7 @@ var app = new Vue({
   },
   methods: {
     getBooks: function() {
-      axios.get("api/books/" + this.token).then(response => {
+      axios.get("api/books/" + this.).then(response => {
 	this.books = response.data;
 	return true;
       }).catch(err => {
