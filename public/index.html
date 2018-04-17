@@ -19,6 +19,9 @@
 	</ol>
         <button v-on:click="clearBooks()">Clear</button>
         <button v-on:click="saveBooks()">Save</button>
+	<br>
+        <input type="text" v-model="bookText">
+        <button v-on:click="addBook()">Add</button>
       </div>
       
       <div class="column">
@@ -44,6 +47,9 @@
 	</ol>
         <button v-on:click="clearGames()">Clear</button>
         <button v-on:click="saveGames()">Save</button>
+	<br>
+        <input type="text" v-model="gameText">
+        <button v-on:click="addGame()">Add</button>
       </div>
     </div>
 

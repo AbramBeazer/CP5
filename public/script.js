@@ -49,6 +49,7 @@ var app = new Vue({
     addBook: function() {
       
       this.getBooks();
+      this.bookText = "";
     },
     getMovies: function() {
       axios.get("api/movies/" + this.token).then(response => {
@@ -75,6 +76,7 @@ var app = new Vue({
     addMovie: function() {
 
       this.getMovies();
+      this.movieText = "";
     },
     getGames: function() {
       axios.get("api/games/" + this.token).then(response => {
@@ -101,6 +103,7 @@ var app = new Vue({
     addGame: function() {
       
       this.getGames();
+      this.gameText = "";
     },
     dragItem: function(item) {
       this.drag = item;
