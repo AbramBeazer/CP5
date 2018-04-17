@@ -24,12 +24,15 @@
       <div class="column">
         <h3>Movies</h3>
  	<ol>
- 	  <li v-for="item in movies">
-	    {{item.title}}
+ 	  <li v-for="item in movies" draggable="true" v-on:dragstart="dragItem(item)" v-on:dragover.prevent v-on:drop="dropItem(movies, item)">
+	    {{item.title}} &nbsp; <button v-on:click="delete(movies, item)">Delete</button>
           </li>
  	</ol>
         <button v-on:click="clearMovies()">Clear</button>
         <button v-on:click="saveMovies()">Save</button>
+	<br>
+        <input type="text" v-model="movieText">
+        <button v-on:click="addMovie()">Add</button>
       </div>
 
       <div class="column">

@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/AbramBeazer/CP5/issues"
   },
-  "homepage": "https://github.com/AbramBeazer/CP5#readme"
+  "homepage": "https://github.com/AbramBeazer/CP5#readme",
+  "dependencies": {
+    "jsonwebtoken": "^8.2.1"
+  }
 }
