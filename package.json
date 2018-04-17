@@ -1,0 +1,20 @@
+{
+  "name": "cp5",
+  "version": "1.0.0",
+  "description": "Creative Project 5",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbramBeazer/CP5.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbramBeazer/CP5/issues"
+  },
+  "homepage": "https://github.com/AbramBeazer/CP5#readme"
+}
