@@ -33,14 +33,14 @@ var app = new Vue({
   },
   methods: {
     getItems: function(type, container) {
-      axios.get("/api/titles/", {type: type, username: this.username}, this.authHeader).then(response => {
+      axios.get("/api/titles", {type: type, username: this.username}, this.authHeader).then(response => {
       	container = response.data.list;
       	return true;
       }).catch(err => {
       });
     },
     saveItems: function(type, container) {
-      axios.post("/api/titles/" + this.username, {
+      axios.post("/api/titles" + this.username, {
 	       games: this.games,
     }, this.authHeader).then(response => {
 	     return true;
@@ -48,7 +48,7 @@ var app = new Vue({
       });
     },
     clearItems: function() {
-      axios.delete("/api/games/" + this.username, this.authHeader).then(response => {
+      axios.delete("/api/titles" + this.username, this.authHeader).then(response => {
         this.getGames();
       	return true;
       }).catch(err => {
