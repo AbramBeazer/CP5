@@ -120,7 +120,6 @@ app.post('/api/titles', verifyToken, (req, res) => {
      knex('titles').insert({username: username, title: title, number: number, type: type});
      res.status(200).send();
    });
-});
 
 //save items
 //app.post('api/titles', verifyToken, (req, res) => {});
