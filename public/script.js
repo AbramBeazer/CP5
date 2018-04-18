@@ -57,6 +57,7 @@ var app = new Vue({
     addItem: function(type, container) {
       let text = "";
       let number = container.length;
+      if(number === 0){number = 1;}
       if(type === 'game'){text = this.gameText;}
       else if(type === 'book'){text = this.bookText;}
       else if(type === 'movie'){text = this.movieText;}
