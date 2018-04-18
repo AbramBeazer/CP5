@@ -83,7 +83,7 @@ var app = new Vue({
       container.splice(index, 1);
     },
     login: function(){
-      if(this.username === '' || this.password === '')
+      if(this.usernameEnter === '' || this.passwordEnter === '')
       {
         console.log("Please provide a username and password.");
         return;
@@ -100,7 +100,7 @@ var app = new Vue({
       }).catch(err => {});
     },
     register: function(){
-      if(this.username === '' || this.password === '')
+      if(this.usernameEnter === '' || this.passwordEnter === '')
       {
         console.log("Please provide a username and password.");
         return;
