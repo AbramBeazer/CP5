@@ -21,7 +21,7 @@ const jwt = require('jsonwebtoken');
 let jwtSecret = process.env.jwtSecret;
 if (jwtSecret === undefined) {
   console.log("You need to define a jwtSecret environment variable to continue.");
-  knex.destroy();
+  db.destroy();
   process.exit();
 }
 
@@ -33,10 +33,10 @@ app.post('/api/login', (req, res) => {
         res.status(403).send("Invalid credentials");
         throw new Error('abort');
       }
-      return [bcrypt.compare(req.body.password, user.hash),user];
+      return [bcrypt.compare(req.body.password, user.password),user];
     }).spread((result,user) => {
     if (result) {
-       let token = jwt.sign({ id: user.id }, jwtSecret, {
+       let token = jwt.sign({ id: user.username }, jwtSecret, {
         expiresIn: 86400 // expires in 24 hours
        });
       res.status(200).json({token: token});
@@ -51,13 +51,36 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-/*
- let token = jwt.sign({ id: user.id }, jwtSecret, {
-     expiresIn: 86400 // expires in 24 hours
+app.post('/api/register', (req, res) => {
+  knex('users').where('username',req.body.username).first().then(user => {
+    if (user !== undefined) {
+      res.status(403).send("Username already exists");
+      throw new Error('abort');
+    }
+    return knex('users').where('username',req.body.username).first();
+  }).then(user => {
+    if (user !== undefined) {
+      res.status(409).send("User name already exists");
+      throw new Error('abort');
+    }
+    return bcrypt.hash(req.body.password, saltRounds);
+  }).then(hash => {
+    return knex('users').insert({password: hash, username:req.body.username});
+  }).then(ids => {
+    return knex('users').where('username',req.body.username).first().select('username');
+  }).then(user => {
+      let token = jwt.sign({ id: user.username }, jwtSecret, {
+      expiresIn: 86400 // expires in 24 hours
     });
-    res.status(200).json({user:user,token:token});
-
-*/
+    res.status(200).json({token:token});
+    return;
+  }).catch(error => {
+    if (error.message !== 'abort') {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+});
 
 const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
@@ -71,10 +94,6 @@ const verifyToken = (req, res, next) => {
     next();
   });
 }
-//
-// app.get
-//
-// app.post
 
 app.delete('/api/books/:username', verifyToken, (req,res) => {
  // id of the person who is following
