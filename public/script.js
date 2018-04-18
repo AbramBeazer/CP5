@@ -28,7 +28,7 @@ var app = new Vue({
   },
   computed: {
     authHeader: function(){
-      return { headers: {'Authorization': token}};
+      return { headers: {'Authorization': this.token}};
     }
   },
   methods: {
