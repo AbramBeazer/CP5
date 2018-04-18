@@ -7,9 +7,15 @@
 </head>
 <body>
     <div id="app">
-    <h1>Gimme your top ten.</h1>
 
-    <div class="row">
+    <input type="text" v-model="username">
+    <input type="text" v-model="password">
+    <button v-on:click="login()">Login</button>
+    <button v-on:click="register()">Register</button>
+
+    <h1>{{headerMessage}}</h1>
+
+    <div class="row" v-if="token !== ''">
       <div class="column">
         <h3>Books</h3>
         <ol>
@@ -23,12 +29,12 @@
         <input type="text" v-model="bookText">
         <button v-on:click="addBook()">Add</button>
       </div>
-      
+
       <div class="column">
         <h3>Movies</h3>
  	<ol>
  	  <li v-for="item in movies" draggable="true" v-on:dragstart="dragItem(item)" v-on:dragover.prevent v-on:drop="dropItem(movies, item)">
-	    {{item.title}} &nbsp; <button v-on:click="delete(movies, item)">Delete</button>
+	    {{item.title}} &nbsp; <button v-on:click="deleteItem(movies, item)">Delete</button>
           </li>
  	</ol>
         <button v-on:click="clearMovies()">Clear</button>
