@@ -114,12 +114,13 @@ app.post('/api/titles', verifyToken, (req, res) => {
    let title = req.body.title;
    let number = req.body.number;
    if(username !== req.userID){res.status(403).send("Invalid Credentials."); return;}
-   return knex('titles').where('titles.username', username).andWhere('titles.title', title).then(match => {
+   knex('titles').where('titles.username', username).andWhere('titles.title', title).then(match => {
      if(match !== undefined){res.status(409).send("Already Exists."); return;}
      knex('titles').insert({username: username, title: title, number: number, type: type});
      res.status(200).send();
      return;
    });
+});
 
 //save items
 //app.post('api/titles', verifyToken, (req, res) => {});
