@@ -12,7 +12,7 @@ app.use(express.static('public'))
 // Knex Setup
 const env = process.env.NODE_ENV || 'development';
 const config = require('./knexfile')[env];
-const db = require('knex')(config);
+const knex = require('knex')(config);
 // bcrypt setup
 let bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -21,7 +21,7 @@ const jwt = require('jsonwebtoken');
 let jwtSecret = process.env.jwtSecret;
 if (jwtSecret === undefined) {
   console.log("You need to define a jwtSecret environment variable to continue.");
-  db.destroy();
+  knex.destroy();
   process.exit();
 }
 

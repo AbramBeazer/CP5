@@ -30,7 +30,7 @@ var app = new Vue({
   },
   methods: {
     getBooks: function() {
-      axios.get("/api/books/" + this.username, authHeader).then(response => {
+      axios.get("/api/books/" + this.username, this.authHeader).then(response => {
 	this.books = response.data;
 	return true;
       }).catch(err => {
@@ -39,13 +39,13 @@ var app = new Vue({
     saveBooks: function() {
       axios.post("/api/books/" + this.username, {
 	books: this.books,
-      }, authHeader).then(response => {
+      }, this.authHeader).then(response => {
 	return true;
       }).catch(err => {
       });
     },
     clearBooks: function() {
-      axios.delete("/api/books/" + this.username, authHeader).then(response => {
+      axios.delete("/api/books/" + this.username, this.authHeader).then(response => {
         this.getBooks();
       	return true;
       }).catch(err => {
@@ -57,7 +57,7 @@ var app = new Vue({
       this.bookText = "";
     },
     getMovies: function() {
-      axios.get("/api/movies/" + this.username, authHeader).then(response => {
+      axios.get("/api/movies/" + this.username, this.authHeader).then(response => {
 	this.movies = response.data;
 	return true;
       }).catch(err => {
@@ -66,13 +66,13 @@ var app = new Vue({
     saveMovies: function() {
       axios.post("/api/movies/" + this.username, {
 	        movies: this.movies,
-      }, authHeader).then(response => {
+      }, this.authHeader).then(response => {
 	       return true;
       }).catch(err => {
       });
     },
     clearMovies: function() {
-      axios.delete("/api/movies/" + this.username, authHeader).then(response => {
+      axios.delete("/api/movies/" + this.username, this.authHeader).then(response => {
         this.getMovies();
       	return true;
       }).catch(err => {
@@ -84,7 +84,7 @@ var app = new Vue({
       this.movieText = "";
     },
     getGames: function() {
-      axios.get("/api/games/" + this.username, authHeader).then(response => {
+      axios.get("/api/games/" + this.username, this.authHeader).then(response => {
 	this.games = response.data;
 	return true;
       }).catch(err => {
@@ -93,13 +93,13 @@ var app = new Vue({
     saveGames: function() {
       axios.post("/api/games/" + this.username, {
 	games: this.games,
-}, authHeader).then(response => {
+}, this.authHeader).then(response => {
 	return true;
       }).catch(err => {
       });
     },
     clearGames: function() {
-      axios.delete("/api/games/" + this.username, authHeader).then(response => {
+      axios.delete("/api/games/" + this.username, this.authHeader).then(response => {
         this.getGames();
       	return true;
       }).catch(err => {
