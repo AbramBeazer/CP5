@@ -33,10 +33,10 @@ var app = new Vue({
   },
   methods: {
     getItems: function(type) {
-      //console.log(this.authHeader.headers['authorization']);
+      console.log(this.authHeader.headers['authorization']);
      // console.log(type);
     //  console.log(this.username);
-      axios.get("/api/titles/" + this.username + "/type/" + type).then(response => {
+      axios.get("/api/titles/" + this.username + "/type/" + type, this.authHeader).then(response => {
 //	console.log("GOT BACK");
 	if(type === 'book')
       		this.books = response.data.list;
@@ -59,7 +59,7 @@ var app = new Vue({
     clearItems: function(type) {
 	console.log(this.username);
 	console.log(type);
-      axios.delete("/api/titles/" + this.username + "/type/" + type).then(response => {
+      axios.delete("/api/titles/" + this.username + "/type/" + type, this.authHeader).then(response => {
         this.getItems(type);
       	return true;
       }).catch(err => {
