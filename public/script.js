@@ -28,15 +28,24 @@ var app = new Vue({
   },
   computed: {
     authHeader: function(){
-      return { headers: {'Authorization': this.token}};
+      return { headers: {'authorization': this.token}};
     }
   },
   methods: {
-    getItems: function(type, container) {
-      axios.get("/api/titles", {type: type, username: this.username}, this.authHeader).then(response => {
-      	container = response.data.list;
+    getItems: function(type) {
+      //console.log(this.authHeader.headers['authorization']);
+     // console.log(type);
+    //  console.log(this.username);
+      axios.get("/api/titles/" + this.username + "/type/" + type).then(response => {
+//	console.log("GOT BACK");
+	if(type === 'book')
+      		this.books = response.data.list;
+	else if(type === 'movie')
+		this.movies = response.data.list;
+	else if(type === 'game')
+		this.games = response.data.list;
       	return true;
-      }).catch(err => {
+      }).catch(err => {console.log(err);
       });
     },
     saveItems: function(type, container) {
@@ -47,45 +56,51 @@ var app = new Vue({
       }).catch(err => {
       });
     },
-    clearItems: function() {
-      axios.delete("/api/titles" + this.username, this.authHeader).then(response => {
-        this.getGames();
+    clearItems: function(type) {
+	console.log(this.username);
+	console.log(type);
+      axios.delete("/api/titles/" + this.username + "/type/" + type).then(response => {
+        this.getItems(type);
       	return true;
       }).catch(err => {
       });
     },
-    addItem: function(type, container) {
+    addItem: function(type) {
       let text = "";
-      let number = container.length;
+      let number = 0;      
+      if(type === 'game'){text = this.gameText; number = this.games.length + 1;}
+      else if(type === 'book'){text = this.bookText; number = this.books.length + 1;}
+      else if(type === 'movie'){text = this.movieText; number = this.movies.length + 1;}
       if(number === 0){number = 1;}
-      if(type === 'game'){text = this.gameText;}
-      else if(type === 'book'){text = this.bookText;}
-      else if(type === 'movie'){text = this.movieText;}
       console.log(number);
       axios.post("/api/titles",
       {username: this.username, type: type, title: text, number: number}, this.authHeader).then(response => {
         console.log("Y");
-        this.getItems(type, container);
-        if(type === 'game'){this.gameText = "";}
-        else if(type === 'book'){this.bookText = "";}
-        else if(type === 'movie'){this.movieText = "";}
-        return true;
-      }).catch(err => {});
+        this.getItems(type).then(tf => {
+          if(type === 'game'){this.gameText = "";}
+          else if(type === 'book'){this.bookText = "";}
+          else if(type === 'movie'){this.movieText = "";}
+          return true;
+      });
+	}).catch(err => {});
     },
     dragItem: function(type, item) {
       this.drag = item;
       this.dragType = type;
     },
-    dropItem: function(container, item) {
-      if(this.dragType !== container){console.log("Not same type"); return;}
-      let indexTarget = container.indexOf(item);
-      let index = container.indexOf(this.drag);
-      container.splice(index,1);
-      container.splice(indexTarget,0,this.drag);
+    dropItem: function(type, item) {
+      if(this.dragType !== type){console.log("Not same type"); 
+	this.drag = {};
+        this.dragType = "";
+	return;
+      }
+      
     },
-    deleteItem: function(container, item) {
-      let index = container.indexOf(item);
-      container.splice(index, 1);
+    deleteItem: function(type, item) {
+	console.log(this.username);
+	console.log(item);
+	axios.delete("/api/titles/"+item.title+"/username/"+this.username).then(response => {
+          this.getItems(type);});      
     },
     login: function(){
       if(this.usernameEnter === '' || this.passwordEnter === '')
@@ -100,9 +115,10 @@ var app = new Vue({
         this.token = response.data.token;
         this.username = this.usernameEnter;
         this.password = this.passwordEnter;
-        this.headerMessage = "Enter your favorite things and then drag and drop them around as you want!";
+        this.headerMessage = "Rank your favorite things!";
         return true;
-      }).catch(err => {});
+      }).then(result => {this.getItems('book', this.books); this.getItems('movie', this.movies); 
+			this.getItems('game', this.games)}).catch(err => {});
     },
     register: function(){
       if(this.usernameEnter === '' || this.passwordEnter === '')
@@ -117,9 +133,10 @@ var app = new Vue({
         this.token = response.data.token;
         this.username = this.usernameEnter;
         this.password = this.passwordEnter;
-        this.headerMessage = "Enter your favorite things and then drag and drop them around as you want!";
+        this.headerMessage = "Rank your favorite things!";
         return true;
-      }).catch(err => {});
+      }).then(result => {this.getItems('book', this.books); this.getItems('movie', this.movies); 
+			this.getItems('game', this.games)}).catch(err => {});
     },
   }
 });

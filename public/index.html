@@ -20,42 +20,38 @@
         <h3>Books</h3>
         <ol>
  	  <li v-for="item in books">
-	    {{item.title}}
+		{{item.number}} - {{item.title}} &nbsp; 
           </li>
 	</ol>
-        <button v-on:click="clearItems('book', books)">Clear</button>
-        <button v-on:click="saveItems('book', books)">Save</button>
+        <button v-on:click="clearItems('book')">Clear</button>
 	<br>
         <input type="text" v-model="bookText">
-        <button v-on:click="addItem('book', books)">Add</button>
+        <button v-on:click="addItem('book')">Add</button>
       </div>
 
       <div class="column">
         <h3>Movies</h3>
  	<ol>
- 	  <li v-for="item in movies" draggable="true" v-on:dragstart="dragItem(movies,item)" v-on:dragover.prevent v-on:drop="dropItem(movies, item)">
-	    {{item.title}} &nbsp; <button v-on:click="deleteItem(movies, item)">Delete</button>
+ 	  <li v-for="item in movies" draggable="true" v-on:dragstart="dragItem('movie', item)" v-on:dragover.prevent v-on:drop="dropItem('movie', item)">
+	    {{item.number}} - {{item.title}} &nbsp; 
           </li>
  	</ol>
-        <button v-on:click="clearItems('movie', movies)">Clear</button>
-        <button v-on:click="saveItems('movie', movies)">Save</button>
+        <button v-on:click="clearItems('movie')">Clear</button>
 	<br>
         <input type="text" v-model="movieText">
-        <button v-on:click="addItem('movie', movies)">Add</button>
+        <button v-on:click="addItem('movie')">Add</button>
       </div>
 
       <div class="column">
         <h3>Video Games</h3>
 	<ol>
  	  <li v-for="item in games">
-	    {{item.title}}
-          </li>
+	    {{item.number}} - {{item.title}} &nbsp;           </li>
 	</ol>
-        <button v-on:click="clearItems('game', games)">Clear</button>
-        <button v-on:click="saveItems('game', games)">Save</button>
+        <button v-on:click="clearItems('game')">Clear</button>
 	<br>
         <input type="text" v-model="gameText">
-        <button v-on:click="addItem('game', games)">Add</button>
+        <button v-on:click="addItem('game')">Add</button>
       </div>
     </div>
 

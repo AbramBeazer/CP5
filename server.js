@@ -82,10 +82,13 @@ app.post('/api/register', (req, res) => {
   });
 });
 
+/*
 const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token)
-    return res.status(403).send({ error: 'No token provided.' });
+console.log(req.headers['authorization']);
+  var token = req.headers['authorization'];
+  if (!token){ console.log("HERE");
+    return res.status(403).send({ error: 'No token provided.' });}
+console.log("BEFORE");
   jwt.verify(token, jwtSecret, function(err, decoded) {
     if (err)
       return res.status(500).send({ error: 'Failed to authenticate token.' });
@@ -94,13 +97,17 @@ const verifyToken = (req, res, next) => {
     next();
   });
 }
+*/
 
-app.get('/api/titles', verifyToken, (req, res) => {
-  let username = req.body.username;
-  let type = req.body.type;
-  if(username !== req.userID){ res.status(403).send(); return;}
-  knex('titles').where('titles.username', username).andWhere('titles.type', type).orderBy('number')
-                .select('id','number','title').then(list => {
+app.get('/api/titles/:username/type/:type',  (req, res) => {
+  let username = req.params.username;
+  let type = req.params.type;
+  console.log("HELLO");
+  console.log(username);
+  console.log(type);
+ // if(username !== req.userID){ console.log("W"); res.status(403).send("HERE"); return;}
+    knex('titles').where('titles.username', username).andWhere('titles.type', type).orderBy('number')
+                .select('number','title', 'type').then(list => {
                     res.status(200).json({list:list});
                   }).catch(error => {
                     res.status(500).json({error});
@@ -108,41 +115,55 @@ app.get('/api/titles', verifyToken, (req, res) => {
 });
 
 //add item
-app.post('/api/titles', verifyToken, (req, res) => {
+app.post('/api/titles',  (req, res) => {
    let username = req.body.username;
    let type = req.body.type;
    let title = req.body.title;
-   let number = req.body.number;
-   if(username !== req.userID){res.status(403).send("Invalid Credentials."); return;}
+   let number = parseInt(req.body.number);
+  // console.log(req.headers['authorization']);
+ //  if(username !== req.userID){res.status(403).send("Invalid Credentials"); return;}
    knex('titles').where('titles.username', username).andWhere('titles.title', title).first().then(match => {
-     if(match !== undefined){res.status(409).send("Already Exists."); return;}
+     if(match !== undefined){res.status(409).send("Already Exists"); return;}
+     knex('titles').insert({username: username, title: title, number: number, type: type}).then(list => {
      console.log("X");
-     knex('titles').insert({username: username, title: title, number: number, type: type});
      res.status(200).send();
      return;
+	});
    });
 });
 
 //save items
-//app.post('api/titles', verifyToken, (req, res) => {});
+//app.post('api/titles', (req, res) => {});
 
 //clear
-app.delete('/api/titles', verifyToken, (req, res) => {});
+app.delete('/api/titles/:username/type/:type',  (req, res) => {
+	console.log("GOT TO CLEAR");
+	console.log(req.params.username);
+	console.log(req.params.type);
+	knex('titles').where({username: req.params.username, type: req.params.type}).first().del().then(response => {
+	res.status(200).send();
+});
+});
 
 //delete an item
-app.delete('/api/titles:id', verifyToken, (req,res) => {
+/*
+app.delete('/api/titles/:title/username/:username',  (req,res) => {
  // id of the person who is following
-   let username = req.body.username;
-   let id = req.params.id;
+   let username = req.params.username;
+   let title = req.params.title;
+   console.log("GOT TO DELETE");
+   console.log(username);
+   console.log(title);
  // check this id
-   if (username !== req.userID) {res.status(403).send("Invalid Credentials."); return;}
-   return knex('titles').where('titles.username', username).andWhere('titles.id', id).then(title => {
-     if(title === undefined){res.status(409).send("Does Not Exist"); return;}
-     knex('titles').where('titles.username', username).andWhere('titles.id', id).del();
+//   if (username !== req.userID) {res.status(403).send("Invalid Credentials."); return;}
+   return knex('titles').where('titles.username', username).andWhere('titles.title', title).then(T => {
+     if(T === undefined){res.status(409).send("Does Not Exist"); return;}
+     knex('titles').where('titles.username', username).andWhere('titles.title', title).del();
      res.status(200).send();
      return;
    });
 });
+*/
 
 
 app.listen(4000, () => console.log('Server listening on port 4000!'))

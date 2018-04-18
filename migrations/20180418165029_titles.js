@@ -1,12 +1,13 @@
 
+
 exports.up = function(knex, Promise) {
   return Promise.all([
 	knex.schema.createTable('titles', function(table){
-		table.unique(['title', 'username']);
-		table.string('title');
+		table.string('title').primary();
 		table.string('type');
 		table.string('username');
 		table.integer('number');
+
 	}),
   ]);
 };
