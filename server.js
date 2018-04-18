@@ -99,8 +99,8 @@ app.get('/api/titles', verifyToken, (req, res) => {
   let username = req.body.username;
   let type = req.body.type;
   if(username !== req.userID){ res.status(403).send(); return;}
-  knex.('titles').where('titles.username', username).andWhere('titles.type', type).orderBy('number','asc')
-                  .select('id','number','title').then(list => {
+  knex('titles').where('titles.username', username).andWhere('titles.type', type).orderBy('number')
+                .select('id','number','title').then(list => {
                     res.status(200).json({list:list});
                   }).catch(error => {
                     res.status(500).json({error});
