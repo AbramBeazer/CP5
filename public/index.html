@@ -27,7 +27,7 @@
         <button v-on:click="saveItems('book', books)">Save</button>
 	<br>
         <input type="text" v-model="bookText">
-        <button v-on:click="addItem('book', books, bookText)">Add</button>
+        <button v-on:click="addItem('book', books)">Add</button>
       </div>
 
       <div class="column">
@@ -41,7 +41,7 @@
         <button v-on:click="saveItems('movie', movies)">Save</button>
 	<br>
         <input type="text" v-model="movieText">
-        <button v-on:click="addItem('movie', movies, movieText)">Add</button>
+        <button v-on:click="addItem('movie', movies)">Add</button>
       </div>
 
       <div class="column">
@@ -55,7 +55,7 @@
         <button v-on:click="saveItems('game', games)">Save</button>
 	<br>
         <input type="text" v-model="gameText">
-        <button v-on:click="addItem('game', games, gameText)">Add</button>
+        <button v-on:click="addItem('game', games)">Add</button>
       </div>
     </div>
 
