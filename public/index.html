@@ -8,8 +8,8 @@
 <body>
     <div id="app">
 
-    Username:<input type="text" v-model="username"> &nbsp;
-    Password:<input type="text" v-model="password">
+    Username:<input type="text" v-model="usernameEnter"> &nbsp;
+    Password:<input type="text" v-model="passwordEnter">
     <button v-on:click="login()">Login</button>
     <button v-on:click="register()">Register</button>
 
@@ -23,25 +23,25 @@
 	    {{item.title}}
           </li>
 	</ol>
-        <button v-on:click="clearBooks()">Clear</button>
-        <button v-on:click="saveBooks()">Save</button>
+        <button v-on:click="clearItems('book', books)">Clear</button>
+        <button v-on:click="saveItems('book', books)">Save</button>
 	<br>
         <input type="text" v-model="bookText">
-        <button v-on:click="addBook()">Add</button>
+        <button v-on:click="addItem('book', books, bookText)">Add</button>
       </div>
 
       <div class="column">
         <h3>Movies</h3>
  	<ol>
- 	  <li v-for="item in movies" draggable="true" v-on:dragstart="dragItem(item)" v-on:dragover.prevent v-on:drop="dropItem(movies, item)">
+ 	  <li v-for="item in movies" draggable="true" v-on:dragstart="dragItem(movies,item)" v-on:dragover.prevent v-on:drop="dropItem(movies, item)">
 	    {{item.title}} &nbsp; <button v-on:click="deleteItem(movies, item)">Delete</button>
           </li>
  	</ol>
-        <button v-on:click="clearMovies()">Clear</button>
-        <button v-on:click="saveMovies()">Save</button>
+        <button v-on:click="clearItems('movie', movies)">Clear</button>
+        <button v-on:click="saveItems('movie', movies)">Save</button>
 	<br>
         <input type="text" v-model="movieText">
-        <button v-on:click="addMovie()">Add</button>
+        <button v-on:click="addItem('movie', movies, movieText)">Add</button>
       </div>
 
       <div class="column">
@@ -51,11 +51,11 @@
 	    {{item.title}}
           </li>
 	</ol>
-        <button v-on:click="clearGames()">Clear</button>
-        <button v-on:click="saveGames()">Save</button>
+        <button v-on:click="clearItems('game', games)">Clear</button>
+        <button v-on:click="saveItems('game', games)">Save</button>
 	<br>
         <input type="text" v-model="gameText">
-        <button v-on:click="addGame()">Add</button>
+        <button v-on:click="addItem('game', games, gameText)">Add</button>
       </div>
     </div>
 

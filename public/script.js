@@ -6,8 +6,11 @@ var app = new Vue({
     games: [],
     username: "",
     password: "",
+    usernameEnter: "",
+    passwordEnter: "",
     token: "",
     drag: {},
+    dragType: "",
     bookText: "",
     movieText: "",
     gameText: "",
@@ -29,91 +32,47 @@ var app = new Vue({
     }
   },
   methods: {
-    getBooks: function() {
-      axios.get("/api/books/" + this.username, this.authHeader).then(response => {
-	this.books = response.data;
-	return true;
-      }).catch(err => {
-      });
-    },
-    saveBooks: function() {
-      axios.post("/api/books/" + this.username, {
-	books: this.books,
-      }, this.authHeader).then(response => {
-	return true;
-      }).catch(err => {
-      });
-    },
-    clearBooks: function() {
-      axios.delete("/api/books/" + this.username, this.authHeader).then(response => {
-        this.getBooks();
+    getItems: function(type, container) {
+      axios.get("/api/titles/", {type: type, username: this.username}, this.authHeader).then(response => {
+      	container = response.data.list;
       	return true;
       }).catch(err => {
       });
     },
-    addBook: function() {
-
-      this.getBooks();
-      this.bookText = "";
-    },
-    getMovies: function() {
-      axios.get("/api/movies/" + this.username, this.authHeader).then(response => {
-	this.movies = response.data;
-	return true;
+    saveItems: function(type, container) {
+      axios.post("/api/titles/" + this.username, {
+	       games: this.games,
+    }, this.authHeader).then(response => {
+	     return true;
       }).catch(err => {
       });
     },
-    saveMovies: function() {
-      axios.post("/api/movies/" + this.username, {
-	        movies: this.movies,
-      }, this.authHeader).then(response => {
-	       return true;
-      }).catch(err => {
-      });
-    },
-    clearMovies: function() {
-      axios.delete("/api/movies/" + this.username, this.authHeader).then(response => {
-        this.getMovies();
-      	return true;
-      }).catch(err => {
-      });
-    },
-    addMovie: function() {
-
-      this.getMovies();
-      this.movieText = "";
-    },
-    getGames: function() {
-      axios.get("/api/games/" + this.username, this.authHeader).then(response => {
-	this.games = response.data;
-	return true;
-      }).catch(err => {
-      });
-    },
-    saveGames: function() {
-      axios.post("/api/games/" + this.username, {
-	games: this.games,
-}, this.authHeader).then(response => {
-	return true;
-      }).catch(err => {
-      });
-    },
-    clearGames: function() {
+    clearItems: function() {
       axios.delete("/api/games/" + this.username, this.authHeader).then(response => {
         this.getGames();
       	return true;
       }).catch(err => {
       });
     },
-    addGame: function() {
-
-      this.getGames();
-      this.gameText = "";
+    addItem: function(type, container) {
+      let text = "";
+      let number = container.length;
+      if(type === 'game'){text = this.gameText;}
+      else if(type === 'book'){text = this.bookText;}
+      else if(type === 'movie'){text = this.movieText;}
+      axios.put("/api/titles",
+      {username: this.username, type: type, title: text, number: number}, this.authHeader);
+      this.getItems(type, container);
+      if(type === 'game'){this.gameText = "";}
+      else if(type === 'book'){this.bookText = "";}
+      else if(type === 'movie'){this.movieText = "";}
     },
-    dragItem: function(item) {
+    dragItem: function(type, item) {
       this.drag = item;
+      this.dragType = type;
     },
     dropItem: function(container, item) {
+      if(this.dragType !== container){console.log("Not same type"); return;}
       let indexTarget = container.indexOf(item);
       let index = container.indexOf(this.drag);
       container.splice(index,1);
@@ -130,10 +89,12 @@ var app = new Vue({
         return;
       }
       axios.post("/api/login", {
-        username: this.username,
-        password: this.password,
+        username: this.usernameEnter,
+        password: this.passwordEnter,
       }).then(response => {
         this.token = response.data.token;
+        this.username = this.usernameEnter;
+        this.password = this.passwordEnter;
         this.headerMessage = "Enter your favorite things and then drag and drop them around as you want!";
         return true;
       }).catch(err => {});
@@ -145,10 +106,12 @@ var app = new Vue({
         return;
       }
       axios.post("/api/register", {
-        username: this.username,
-        password: this.password,
+        username: this.usernameEnter,
+        password: this.passwordEnter,
       }).then(response => {
         this.token = response.data.token;
+        this.username = this.usernameEnter;
+        this.password = this.passwordEnter;
         this.headerMessage = "Enter your favorite things and then drag and drop them around as you want!";
         return true;
       }).catch(err => {});

@@ -95,15 +95,51 @@ const verifyToken = (req, res, next) => {
   });
 }
 
-app.delete('/api/books/:username', verifyToken, (req,res) => {
+app.get('/api/titles', verifyToken, (req, res) => {
+  let username = req.body.username;
+  let type = req.body.type;
+  if(username !== req.userID){ res.status(403).send(); return;}
+  knex.('titles').where('titles.username', username).andWhere('titles.type', type).orderBy('number','asc')
+                  .select('id','number','title').then(list => {
+                    res.status(200).json({list:list});
+                  }).catch(error => {
+                    res.status(500).json({error});
+                  });
+});
+
+//add item
+app.post('/api/titles', verifyToken, (req, res) => {
+   let username = req.body.username;
+   let type = req.body.type;
+   let title = req.body.title;
+   let number = req.body.number;
+   if(username !== req.userID){res.status(403).send("Invalid Credentials."); return;}
+   return knex.('titles').where('titles.username', username).andWhere('titles.title', title).then(match => {
+     if(match !== undefined){res.status(409).send("Already Exists."); return;}
+     knex('titles').insert({username: username, title: title, number: number, type: type});
+     res.status(200).send();
+   });
+});
+
+//save items
+//app.post('api/titles', verifyToken, (req, res) => {});
+
+//clear
+app.delete('/api/titles', verifyToken, (req, res) => {});
+
+//delete an item
+app.delete('/api/titles:id', verifyToken, (req,res) => {
  // id of the person who is following
-   let name = req.params.username;
+   let username = req.body.username;
+   let id = req.params.id;
  // check this id
-   if (name !== req.userID) {
-     res.status(403).send();
+   if (username !== req.userID) {res.status(403).send("Invalid Credentials."); return;}
+   return knex.('titles').where('titles.username', username).andWhere('titles.id', id).then(title => {
+     if(title === undefined){res.status(409).send("Does Not Exist"); return;}
+     knex.('titles').where('titles.username', username).andWhere('titles.id', id).del();
+     res.status(200).send();
      return;
-   }
-   res.status(200).json
+   });
 });
 
 
