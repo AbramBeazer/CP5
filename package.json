@@ -18,9 +18,10 @@
   },
   "homepage": "https://github.com/AbramBeazer/CP5#readme",
   "dependencies": {
+    "express": "^4.16.3",
+    "mariasql":"^0.2.6",
     "bcrypt": "^1.0.3",
     "jsonwebtoken": "^8.2.1",
-    "knex": "^0.14.6",
-
+    "knex": "^0.14.6"
   }
 }
