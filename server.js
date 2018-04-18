@@ -42,6 +42,7 @@ app.post('/api/login', (req, res) => {
       res.status(200).json({token: token});
     } else {
        res.status(403).send("Invalid credentials");
+    }
     }).catch(error => {
       if(error.message !== 'abort'){
           console.log(error);
