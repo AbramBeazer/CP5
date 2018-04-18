@@ -62,6 +62,7 @@ var app = new Vue({
       else if(type === 'movie'){text = this.movieText;}
       axios.post("/api/titles",
       {username: this.username, type: type, title: text, number: number}, this.authHeader).then(response => {
+        console.log("Y");
         this.getItems(type, container);
         if(type === 'game'){this.gameText = "";}
         else if(type === 'book'){this.bookText = "";}
