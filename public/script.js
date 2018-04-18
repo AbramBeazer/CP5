@@ -61,11 +61,13 @@ var app = new Vue({
       else if(type === 'book'){text = this.bookText;}
       else if(type === 'movie'){text = this.movieText;}
       axios.post("/api/titles",
-      {username: this.username, type: type, title: text, number: number}, this.authHeader);
-      this.getItems(type, container);
-      if(type === 'game'){this.gameText = "";}
-      else if(type === 'book'){this.bookText = "";}
-      else if(type === 'movie'){this.movieText = "";}
+      {username: this.username, type: type, title: text, number: number}, this.authHeader).then(response => {
+        this.getItems(type, container);
+        if(type === 'game'){this.gameText = "";}
+        else if(type === 'book'){this.bookText = "";}
+        else if(type === 'movie'){this.movieText = "";}
+        return true;
+      }).catch(err => {});
     },
     dragItem: function(type, item) {
       this.drag = item;
